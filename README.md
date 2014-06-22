@@ -27,6 +27,28 @@ $ source ~/.profile
 $ brew install git-p4-extras
 ```
 
+GIT P4 Setup Tips
+-----------------
+
+If you are newbie for git-p4 toolkit, you may need to setup git-p4 config as well
+
+Set default value of P4USER, P4PORT, P4CLIENT for p4 cli tool.
+
+.profile
+```bash
+$ echo export P4USER="your_name" >> ~/.profile
+$ echo export P4PORT="tw-p4proxy:1667" >> ~/.profile
+$ echo export P4CLIENT="your_workspace" >> ~/.profile
+```
+
+${HOME}/.gitconfig
+```bash
+$ git config --global git-p4.port=tw-p4proxy:1667
+$ git config --global git-p4.user=your_name
+$ git config --global git-p4.client=your_workspace
+$ git config --global git-p4.skipsubmitedit=true
+```
+
 Commands
 --------
 
