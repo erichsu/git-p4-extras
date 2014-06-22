@@ -1,0 +1,21 @@
+#!/bin/bash -e
+BRANCH=$1
+if [ -z $1 ]; then
+   BRANCH=$(git config --get git-p4.int-branch)
+fi
+
+if [ -z "$BRANCH" ]; then
+    echo "Can't find your branch map"
+    echo "You can search the branch map by \"p4 branches\""
+    exit 1
+fi
+echo "Suggest using \"$BRANCH\""
+read -p "Are you sure?[Y]" YN
+if [ "$YN" == "n" ] || [ "$YN" == "N" ]; then
+    echo "Abort."
+    exit 0
+fi
+
+p4 integ -b $BRANCH -d
+p4 resolve -at
+p4 submit -d "Merge from Dev"

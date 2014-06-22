@@ -1,0 +1,17 @@
+#!/bin/bash -e
+function check_p4_login() {
+
+  p4 -u $P4USER -p $P4PORT login -s > /dev/null 2>&1
+  IS_LOGIN=$?
+  if [ $IS_LOGIN != 0 ]; then
+    echo "Login as \"$P4USER\""
+    p4 -u $P4USER -p $P4PORT login
+    return $?
+  fi
+  return 0
+}
+
+function git_current_branch() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return;
+  echo "("${ref#refs/heads/}") ";
+}

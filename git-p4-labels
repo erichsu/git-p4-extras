@@ -1,0 +1,5 @@
+#!/bin/bash -e
+if [ -z $1 ]; then
+    exit 1
+fi
+p4 labels -t -E "*$1*" | tail

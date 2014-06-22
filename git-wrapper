@@ -1,0 +1,41 @@
+#!/bin/bash -e
+GITW_SYMLINK=$(readlink "$0")
+if [ -n "$GITW_SYMLINK" ]
+then
+  GITW_SYMLINK_DIRECTORY=$(dirname "$GITW_SYMLINK")
+  GITW_FILE_DIRECTORY=$(cd "$GITW_FILE_DIRECTORY" &&
+                        cd "$GITW_SYMLINK_DIRECTORY" && pwd -P)
+fi
+source $GITW_FILE_DIRECTORY/toolkit
+
+GIT=`which git`
+command=$2
+### Wrapping p4 commands
+if [ "$1" == "p4" ]; then
+  check_p4_login || exit 1
+
+  pushd $GITW_FILE_DIRECTORY > /dev/null
+  case "$command" in
+    "integ")
+      shift 2
+      sh ./git-p4-integ $@
+    ;;
+    "labels")
+      shift 2
+      sh ./git-p4-labels $@
+    ;;
+    "build")
+      shift 2
+      sh ./git-p4-build $@
+    ;;
+
+    *)
+      $GIT $@
+    ;;
+  esac
+  popd > /dev/null
+### Native git commands
+else
+  $GIT $@
+fi
+exit $?
