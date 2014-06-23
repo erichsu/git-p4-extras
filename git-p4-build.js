@@ -1,6 +1,7 @@
 var casper = require('casper').create({
     verbose: true,
-    logLevel: "debug"
+    logLevel: "info",
+    viewportSize: {width: 1024, height: 768}
 });
 var x = require('casper').selectXPath;
 
@@ -21,15 +22,30 @@ casper.then(function() {
 });
 
 casper.then(function() {
-  this.fill('form', {
-        'purpose':    casper.cli.get('purpose'),
-        'selectPlatformOptions_right':    ['mac10_8'],
-        'selectL10nOptions_right': ['en', 'ja']
-    }, true);
+  this.waitForSelector("#syncFrom", function() {
+    this.fill('form', {
+      'purpose':    casper.cli.get('purpose'),
+      'chkForceBuild': true,
+      'selectPlatformOptions_left':    ['mac10_8']
+    });
+    this.click("#button3");
+
+    var langs = ['en', 'ja'];
+    langs.forEach(function(lang) {
+      casper.fill('form', {
+        'selectL10nOptions_left': [lang]
+      });
+      casper.click("#button");
+    });
+
+    this.click("a#linkNext");
+  });
 });
 
 casper.then(function() {
-  this.click(x('//*[@value="Execute"]'));
+  this.waitForSelector(x('//*[@value="Execute"]'), function() {
+    this.click(x('//*[@value="Execute"]'));
+  });
 });
 
 casper.run(function() {
