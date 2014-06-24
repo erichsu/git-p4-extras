@@ -1,12 +1,78 @@
 #!/bin/bash -e
-pushd $(dirname $BASH_SOURCE[0]) > /dev/null
-echo "Auto CI submitter"
-
 if [ -z "$(which casperjs)" ];then
   echo "Please install casperjs. (try 'brew install casperjs --devel')"
   exit 1
 fi
 
+GITP4_CONF_PROJECT=$(git config --get git-p4.project)
+GITP4_CONF_PLATFORM=$(git config --get git-p4.platform)
+GITP4_CONF_LANGS=$(git config --get git-p4.langs)
+
+function usage() {
+  echo
+  echo "git p4 build - Submit CI build command line interface."
+  echo
+  echo "git p4 build -h|--help    Show this info."
+  echo "git p4 build -i|--info    Dump build options"
+  echo "git p4 build -c|--config  Setup default options"
+  echo
+}
+
+function configure() {
+  echo "Configure for default options..."
+  echo
+  echo "Please enter your Pojrect name, ex: iTMMS_1.0_MAIN"
+  echo "(was...$GITP4_CONF_PROJECT)"
+  read -p "Project:" project
+  echo "Please enter your Platform, ex: mac10_8, ubt12_04"
+  echo "(was...$GITP4_CONF_PLATFORM)"
+  read -p "Platform:" platform
+  echo "Please enter your languages."
+  echo "If it has multiple opeions, please seperate them by \",\""
+  echo "For example: en,ja,tw"
+  echo "(was...$GITP4_CONF_LANGS)"
+  read -p "Languages:" langs
+  echo "$project ($platform) [$langs]"
+  read -p "Are you sure to save it? [y]" YN
+  if [ "$YN" == "Y" ] || [ -z $YN ]; then
+    git config --local git-p4.project $project
+    git config --local git-p4.platform $platform
+    git config --local git-p4.langs $langs
+    echo
+    echo "Ready!!"
+    echo "You can check the info by \"git p4 build --info\""
+  else
+    echo "Cancelled..."
+  fi
+}
+
+## Parse the options
+while [[ $1 = -?* ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -i|--info)
+            echo "Dump build info..."
+            echo "User: $P4USER"
+            echo "Project: $GITP4_CONF_PROJECT"
+            echo "Platform: $GITP4_CONF_PLATFORM"
+            echo "Languages $GITP4_CONF_LANGS"
+            exit 0
+            ;;
+        -c|--config)
+            configure
+            exit 0
+            ;;
+        *) ;;
+    esac
+
+shift
+done
+
+
+## Get User name
 if [ -z "$P4USER" ]; then
     read -p "User: " user
 else
@@ -14,21 +80,63 @@ else
     echo "Login as \"$user\""
 fi
 
+## Get Password
 read -s -p "Password:" pass
 echo
-echo "1) MUP_iOS_1.0_MAIN (mac10_8) [en, ja]"
-echo "2) iTMMS_2.0_MAIN (mac10_8) [en, ja]"
-echo "3) iTMMS_1.0_MAIN (mac10_8) [en, ja]"
-read -p "Project Name:" project_index
 
-case $project_index in
-  1) project="MUP_iOS_1.0_MAIN" ;;
-  2) project="iTMMS_2.0_MAIN";;
-  3) project="iTMMS_1.0_MAIN";;
-  *) echo "INVALID NUMBER!";exit 1 ;;
-esac
+## Get Project name
+if [ -z "$GITP4_CONF_PROJECT" ] || [ $CONFIGURE_MODE ] ; then
+  echo
+  echo "1) MUP_iOS_1.0_MAIN (mac10_8) [en, ja]"
+  echo "2) iTMMS_2.0_MAIN (mac10_8) [en, ja]"
+  echo "3) iTMMS_1.0_MAIN (mac10_8) [en, ja]"
+  read -p "Project Name:" project_index
+  case $project_index in
+    1) project="MUP_iOS_1.0_MAIN" ;;
+    2) project="iTMMS_2.0_MAIN";;
+    3) project="iTMMS_1.0_MAIN";;
+    *) echo "INVALID NUMBER!";exit 1 ;;
+  esac
+else
+  project=$GITP4_CONF_PROJECT
+  echo "Project: $project"
+fi
 
+## Get Purpose
 read -p "Purpose:" purpose
 
-casperjs git-p4-build.js --user=$user --pass=$pass --project=$project --purpose="$purpose"
-popd
+## Get Platform
+if [ -z $GITP4_CONF_PLATFORM ]; then
+  echo
+  echo "1) mac10_8"
+  echo "2) ubt12_04"
+  read -p "Platform:" platform_index
+  case $platform_index in
+    1) platform="mac10_8" ;;
+    2) platform="ubt12_04" ;;
+    *) echo "INVALID NUMBER!"; exit 1 ;;
+  esac
+else
+  platform=$GITP4_CONF_PLATFORM
+  echo "Platform: $platform"
+fi
+
+## Get Lang options
+if [ -z $GITP4_CONF_LANGS ]; then
+  echo
+  echo "Please enter your languages."
+  echo "If it has multiple opeions, please seperate them by \",\""
+  echo "For example: en,ja,tw"
+  read -p "Languages:" langs
+else
+  langs=$GITP4_CONF_LANGS
+  echo "Languages: $langs"
+fi
+
+casperjs $GITW_FILE_DIRECTORY/git-p4-build.js \
+      --user=$user \
+      --pass=$pass \
+      --project=$project \
+      --purpose="$purpose" \
+      --platform=$platform \
+      --langs="$langs"

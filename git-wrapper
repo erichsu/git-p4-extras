@@ -6,7 +6,8 @@ then
   GITW_FILE_DIRECTORY=$(cd "$GITW_FILE_DIRECTORY" &&
                         cd "$GITW_SYMLINK_DIRECTORY" && pwd -P)
 fi
-PATH=$PATH:$GITW_FILE_DIRECTORY
+export GITW_FILE_DIRECTORY
+export PATH=$PATH:$GITW_FILE_DIRECTORY
 source toolkit
 
 GIT=`which git`

@@ -26,11 +26,11 @@ casper.then(function() {
     this.fill('form', {
       'purpose':    casper.cli.get('purpose'),
       'chkForceBuild': true,
-      'selectPlatformOptions_left':    ['mac10_8']
+      'selectPlatformOptions_left':    [casper.cli.get('platform')]
     });
     this.click("#button3");
 
-    var langs = ['en', 'ja'];
+    var langs = casper.cli.get('platform').split(",");
     langs.forEach(function(lang) {
       casper.fill('form', {
         'selectL10nOptions_left': [lang]
