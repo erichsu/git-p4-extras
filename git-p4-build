@@ -30,5 +30,5 @@ esac
 
 read -p "Purpose:" purpose
 
-casperjs git-p4-build.js --user=$user --pass=$pass --project=$project --purpose=$purpose
+casperjs git-p4-build.js --user=$user --pass=$pass --project=$project --purpose="$purpose"
 popd
