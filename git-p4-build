@@ -18,11 +18,13 @@ read -s -p "Password:" pass
 echo
 echo "1) MUP_iOS_1.0_MAIN (mac10_8) [en, ja]"
 echo "2) iTMMS_2.0_MAIN (mac10_8) [en, ja]"
+echo "3) iTMMS_1.0_MAIN (mac10_8) [en, ja]"
 read -p "Project Name:" project_index
 
 case $project_index in
   1) project="MUP_iOS_1.0_MAIN" ;;
   2) project="iTMMS_2.0_MAIN";;
+  3) project="iTMMS_1.0_MAIN";;
   *) echo "INVALID NUMBER!";exit 1 ;;
 esac
 
