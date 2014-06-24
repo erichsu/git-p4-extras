@@ -6,29 +6,31 @@ then
   GITW_FILE_DIRECTORY=$(cd "$GITW_FILE_DIRECTORY" &&
                         cd "$GITW_SYMLINK_DIRECTORY" && pwd -P)
 fi
-source $GITW_FILE_DIRECTORY/toolkit
+PATH=$PATH:$GITW_FILE_DIRECTORY
+source toolkit
 
 GIT=`which git`
 command=$2
 ### Wrapping p4 commands
 if [ "$1" == "p4" ]; then
-  check_p4_login || exit 1
-
   case "$command" in
     "integ")
       shift 2
-      sh $GITW_FILE_DIRECTORY/git-p4-integ $@
+      check_p4_login || exit 1
+      sh git-p4-integ $@
     ;;
     "labels")
       shift 2
-      sh $GITW_FILE_DIRECTORY/git-p4-labels $@
+      check_p4_login || exit 1
+      sh git-p4-labels $@
     ;;
     "build")
       shift 2
-      sh $GITW_FILE_DIRECTORY/git-p4-build $@
+      sh git-p4-build $@
     ;;
 
     *)
+      check_p4_login || exit 1
       $GIT $@
     ;;
   esac
