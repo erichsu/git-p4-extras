@@ -85,7 +85,7 @@ read -s -p "Password:" pass
 echo
 
 ## Get Project name
-if [ -z "$GITP4_CONF_PROJECT" ] || [ $CONFIGURE_MODE ] ; then
+if [ -z "$GITP4_CONF_PROJECT" ]; then
   echo
   echo "1) MUP_iOS_1.0_MAIN (mac10_8) [en, ja]"
   echo "2) iTMMS_2.0_MAIN (mac10_8) [en, ja]"
@@ -106,7 +106,7 @@ fi
 read -p "Purpose:" purpose
 
 ## Get Platform
-if [ -z $GITP4_CONF_PLATFORM ]; then
+if [ -z "$GITP4_CONF_PLATFORM" ]; then
   echo
   echo "1) mac10_8"
   echo "2) ubt12_04"
@@ -122,7 +122,7 @@ else
 fi
 
 ## Get Lang options
-if [ -z $GITP4_CONF_LANGS ]; then
+if [ -z "$GITP4_CONF_LANGS" ]; then
   echo
   echo "Please enter your languages."
   echo "If it has multiple opeions, please seperate them by \",\""
