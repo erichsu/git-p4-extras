@@ -84,8 +84,13 @@ $ git p4 labels <Keyword>
 
 Submit CI build system job. (Required casperjs framework)
 
-Support **iTMMS**, **MUP-iOS** project for now.
+Setup default options for build.
 
+```bash
+$ git p4 build --config
+```
+
+Start submit a build job.
 
 ```bash
 $ git p4 build
