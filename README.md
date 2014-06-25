@@ -59,9 +59,18 @@ Commands
 ## git p4 integ
 
 Merge P4 Dev to INT line
-
 ```bash
 $ git p4 integ [Branch Map]
+```
+
+Setup default Branch Mapping name
+```bash
+$ git p4 integ --config
+```
+
+Create new branch mapping to P4 and set to default value
+```bash
+$ git p4 integ --new-branch
 ```
 
 Setup default branch map:
