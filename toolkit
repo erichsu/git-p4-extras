@@ -15,3 +15,7 @@ function git_current_branch() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || return;
   echo "("${ref#refs/heads/}") ";
 }
+
+function git_p4_depot_path() {
+  echo $(git cat-file commit p4/HEAD | tail -n1 | cut -d'"' -f2)
+}

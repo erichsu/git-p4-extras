@@ -1,4 +1,5 @@
 #!/bin/bash -e
+source toolkit
 BRANCH=$1
 GITP4_CONF_BRANCH=$(git config --get git-p4.int-branch)
 
@@ -18,16 +19,16 @@ function usage() {
 
 function new_branch_mapping() {
   echo "Create new branch mapping..."
+  echo "For $(git_p4_depot_path)"
   read -p "Branch Mapping name:" branch
-  read -p "Source Path:" from
   read -p "Target Path:" to
   echo
   echo "$branch:"
-  echo "$from -> $to"
+  echo "$(git_p4_depot_path) -> $to"
   read -p "Are your sure to create it? [y]" YN
   if [ "$YN" == "y" ] || [ -z $YN ]; then
-    echo "Branch:\n\t$branch\nView:\n\t$from/... $to/...\nOwner:\n\t$P4USER\nDescription:\n\tCreated by $P4USER" | \
-      p4 branch -i
+    echo "Branch:\n\t$branch\nView:\n\t$(git_p4_depot_path)... $to...\nOwner:\n\t$P4USER\nDescription:\n\tCreated by $P4USER" | \
+     p4 branch -i
     if [ $? ];then
       git config --local git-p4.int-branch $branch
       echo "Create branch finished."
