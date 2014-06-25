@@ -68,6 +68,9 @@ while [[ $1 = -?* ]]; do
         --purpose)
             purpose="$2"
             ;;
+        --force)
+            force=true
+            ;;
         *) ;;
     esac
 
@@ -110,6 +113,16 @@ if [ -z "$purpose" ]; then
   read -p "Purpose:" purpose
 fi
 
+## Get Force build options
+if [ -z "$force" ]; then
+  read -p "Force Build[n]:" YN
+  if [ -z "$YN" ] || [ "$YN" = "n" ]; then
+    force=false
+  else
+    force=true
+  fi
+fi
+
 ## Get Platform
 if [ -z "$GITP4_CONF_PLATFORM" ]; then
   echo
@@ -143,5 +156,6 @@ casperjs $GITW_FILE_DIRECTORY/git-p4-build.js \
       --pass=$pass \
       --project=$project \
       --purpose="$purpose" \
+      --force=$force \
       --platform=$platform \
       --langs="$langs"

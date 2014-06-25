@@ -25,7 +25,7 @@ casper.then(function() {
   this.waitForSelector("#syncFrom", function() {
     this.fill('form', {
       'purpose':    casper.cli.get('purpose'),
-      'chkForceBuild': true,
+      'chkForceBuild': casper.cli.get('force'),
       'selectPlatformOptions_left':    [casper.cli.get('platform')]
     });
     this.click("#button3");
