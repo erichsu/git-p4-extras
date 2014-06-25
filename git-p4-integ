@@ -1,21 +1,105 @@
 #!/bin/bash -e
 BRANCH=$1
-if [ -z $1 ]; then
-   BRANCH=$(git config --get git-p4.int-branch)
-fi
+GITP4_CONF_BRANCH=$(git config --get git-p4.int-branch)
 
-if [ -z "$BRANCH" ]; then
-    echo "Can't find your branch map"
-    echo "You can search the branch map by \"p4 branches\""
+function usage() {
+  echo
+  echo "git p4 integ - Merge p4 branch by Brancy Mapping"
+  echo
+  echo "git p4 integ -h|--help        Show this info."
+  echo "git p4 integ -n|--new-branch  Create new branch mapping"
+  echo "git p4 integ [MappingKeyword] Integrage by matched mapping"
+  echo "                              Get git config for default mapping, "
+  echo "                              by using git p4 integ -c|--config"
+  echo
+  echo "git p4 build -c|--config  Setup default options"
+  echo
+}
+
+function new_branch_mapping() {
+  echo "Create new branch mapping..."
+  read -p "Branch Mapping name:" branch
+  read -p "Source Path:" from
+  read -p "Target Path:" to
+  echo
+  echo "$branch:"
+  echo "$from -> $to"
+  read -p "Are your sure to create it? [y]" YN
+  if [ "$YN" == "y" ] || [ -z $YN ]; then
+    echo "Branch:\n\t$branch\nView:\n\t$from/... $to/...\nOwner:\n\t$P4USER\nDescription:\n\tCreated by $P4USER" | \
+      p4 branch -i
+    if [ $? ];then
+      git config --local git-p4.int-branch $branch
+      echo "Create branch finished."
+      echo "Check your branch setting by \"p4 branches\", \"git config --get git-p4.int-branch\""
+    fi
+  fi
+}
+
+function configure() {
+  echo "Configure for default options..."
+  echo
+  echo "Please enter your Branch Mapping, ex: iTMMS_1.0"
+  echo "(was...$GITP4_CONF_BRANCH)"
+  read -p "Branch Mapping:" BRANCH
+  read -p "Are you sure to save it? [y]" YN
+  if [ "$YN" == "Y" ] || [ -z $YN ]; then
+    git config --local git-p4.int-branch $BRANCH
+    echo
+    echo "Ready!!"
+    echo "You can check the info by \"git config --get git-p4.int-branch\""
+  else
+    echo "Cancelled..."
+  fi
+}
+
+## Parse the options
+while [[ $1 = -?* ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -n|--new-branch)
+            new_branch_mapping
+            exit 0
+            ;;
+        -c|--config)
+            configure
+            exit 0
+            ;;
+        *) ;;
+    esac
+
+shift
+done
+
+if [ -z $BRANCH ]; then
+  BRANCH=$GITP4_CONF_BRANCH
+else
+  LC_ALL=C
+  branches="$(p4 branches | grep $BRANCH | cut -f2 -d' ')"
+  branch_count=$(echo "$branches" | grep -v '^$' | wc -l | tr -d ' ')
+  if [ $branch_count -gt 1 ]; then
+    echo "$branches"
+    echo
+    echo "** Oh man! there are $branch_count branch mappings"
+    echo "** Please input the branch mapping name more specific~"
     exit 1
-fi
-echo "Suggest using \"$BRANCH\""
-read -p "Are you sure?[Y]" YN
-if [ "$YN" == "n" ] || [ "$YN" == "N" ]; then
-    echo "Abort."
-    exit 0
+  elif [ $branch_count -eq 1 ]; then
+    BRANCH=$branches
+    echo "$branch_count Matched... $BRANCH"
+  else
+    echo "** Oh no!! can't find the branch mapping \"$BRANCH\""
+    exit 1
+  fi
 fi
 
-p4 integ -b $BRANCH -d
-p4 resolve -at
-p4 submit -d "Merge from Dev"
+echo "Merge by Branch mapping: \"$BRANCH\""
+read -p "Are you sure?[y]" YN
+if [ "$YN" == "y" ] || [ -z "$YN" ]; then
+  p4 integ -b $BRANCH -d
+  p4 resolve -at
+  p4 submit -d "Merge from Dev"
+  exit 0
+fi
