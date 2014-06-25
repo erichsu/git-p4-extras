@@ -75,8 +75,12 @@ while [[ $1 = -?* ]]; do
 shift
 done
 
-if [ -z $BRANCH ]; then
-  BRANCH=$GITP4_CONF_BRANCH
+if [ -z "$BRANCH" ] && [ -z "$GITP4_CONF_BRANCH" ]; then
+  echo "** Oh no!! Please give the Branch Mapping name"
+  echo "** Otherwise set default value by \"git p4 integ --config\""
+  exit 1
+elif [ -z "$BRANCH" ] && [ ! -z "$GITP4_CONF_BRANCH" ]; then
+  BRANCH="$GITP4_CONF_BRANCH"
 else
   LC_ALL=C
   branches="$(p4 branches | grep $BRANCH | cut -f2 -d' ')"
