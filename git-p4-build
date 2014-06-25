@@ -65,6 +65,9 @@ while [[ $1 = -?* ]]; do
             configure
             exit 0
             ;;
+        --purpose)
+            purpose="$2"
+            ;;
         *) ;;
     esac
 
@@ -103,7 +106,9 @@ else
 fi
 
 ## Get Purpose
-read -p "Purpose:" purpose
+if [ -z "$purpose" ]; then
+  read -p "Purpose:" purpose
+fi
 
 ## Get Platform
 if [ -z "$GITP4_CONF_PLATFORM" ]; then
