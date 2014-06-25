@@ -30,7 +30,7 @@ casper.then(function() {
     });
     this.click("#button3");
 
-    var langs = casper.cli.get('platform').split(",");
+    var langs = casper.cli.get('langs').split(",");
     langs.forEach(function(lang) {
       casper.fill('form', {
         'selectL10nOptions_left': [lang]
@@ -45,6 +45,8 @@ casper.then(function() {
 casper.then(function() {
   this.waitForSelector(x('//*[@value="Execute"]'), function() {
     this.click(x('//*[@value="Execute"]'));
+  }, function() {
+    this.capture("error.png");
   });
 });
 
