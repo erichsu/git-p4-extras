@@ -18,25 +18,25 @@ if [ "$1" == "p4" ]; then
     "integ")
       shift 2
       check_p4_login || exit 1
-      sh git-p4-integ $@
+      sh git-p4-integ "$@"
     ;;
     "labels")
       shift 2
       check_p4_login || exit 1
-      sh git-p4-labels $@
+      sh git-p4-labels "$@"
     ;;
     "build")
       shift 2
-      sh git-p4-build $@
+      sh git-p4-build "$@"
     ;;
 
     *)
       check_p4_login || exit 1
-      $GIT $@
+      $GIT "$@"
     ;;
   esac
 ### Native git commands
 else
-  $GIT $@
+  $GIT "$@"
 fi
 exit $?
