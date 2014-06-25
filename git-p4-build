@@ -34,7 +34,7 @@ function configure() {
   read -p "Languages:" langs
   echo "$project ($platform) [$langs]"
   read -p "Are you sure to save it? [y]" YN
-  if [ "$YN" == "Y" ] || [ -z $YN ]; then
+  if [ "$YN" == "y" ] || [ -z $YN ]; then
     git config --local git-p4.project $project
     git config --local git-p4.platform $platform
     git config --local git-p4.langs $langs
