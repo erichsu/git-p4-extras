@@ -13,7 +13,8 @@ function usage() {
   echo "                              Get git config for default mapping, "
   echo "                              by using git p4 integ -c|--config"
   echo
-  echo "git p4 build -c|--config  Setup default options"
+  echo "git p4 integ -c|--config      Setup default options"
+  echo "git p4 integ -i|--info        Show branch info"
   echo
 }
 
@@ -67,6 +68,14 @@ while [[ $1 = -?* ]]; do
             ;;
         -c|--config)
             configure
+            exit 0
+            ;;
+        -i|--info)
+            if [ ! -z "$GITP4_CONF_BRANCH" ]; then
+              p4 branch -o $GITP4_CONF_BRANCH
+            else
+              echo "BranchMapping is not set, please apply setting by \"git p4 integ --config\""
+            fi
             exit 0
             ;;
         *) ;;
