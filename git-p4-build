@@ -115,12 +115,7 @@ fi
 
 ## Get Force build options
 if [ -z "$force" ]; then
-  read -p "Force Build[n]:" YN
-  if [ -z "$YN" ] || [ "$YN" = "n" ]; then
-    force=false
-  else
-    force=true
-  fi
+  force=false
 fi
 
 ## Get Platform
