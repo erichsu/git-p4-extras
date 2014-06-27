@@ -1,12 +1,12 @@
 var casper = require('casper').create({
     verbose: true,
-    logLevel: "info",
+    logLevel: "warning",
     viewportSize: {width: 1024, height: 768}
 });
 var x = require('casper').selectXPath;
 
 casper.start("http://ci.trendmicro.com/fullcontrol/index.php?mod=projects", function() {
-
+  this.echo("Start to Login.");
   this.fill('form', {
         'username':    casper.cli.get('user'),
         'password':    casper.cli.get('pass')
@@ -22,6 +22,7 @@ casper.then(function() {
 });
 
 casper.then(function() {
+  this.echo("Filling form...");
   this.waitForSelector("#syncFrom", function() {
     this.fill('form', {
       'purpose':    casper.cli.get('purpose'),
@@ -43,6 +44,7 @@ casper.then(function() {
 });
 
 casper.then(function() {
+  this.echo("Submitting...");
   this.waitForSelector(x('//*[@value="Execute"]'), function() {
     this.click(x('//*[@value="Execute"]'));
   }, function() {
@@ -51,6 +53,6 @@ casper.then(function() {
 });
 
 casper.run(function() {
-  this.capture("screenshot.png");
-  this.echo('done.').exit();
+  // this.capture("screenshot.png");
+  this.echo('CI task submission is done.').exit();
 });
