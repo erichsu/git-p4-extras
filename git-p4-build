@@ -67,9 +67,14 @@ while [[ $1 = -?* ]]; do
             ;;
         --purpose)
             purpose="$2"
+            shift
             ;;
         --force)
             force=true
+            ;;
+        --langs)
+            langs="$2"
+            shift
             ;;
         *) ;;
     esac
@@ -135,16 +140,18 @@ else
 fi
 
 ## Get Lang options
-if [ -z "$GITP4_CONF_LANGS" ]; then
-  echo
-  echo "Please enter your languages."
-  echo "If it has multiple opeions, please seperate them by \",\""
-  echo "For example: en,ja,tw"
-  read -p "Languages:" langs
-else
-  langs=$GITP4_CONF_LANGS
-  echo "Languages: $langs"
+if [ -z "$langs" ]; then
+  if [ -z "$GITP4_CONF_LANGS" ]; then
+    echo
+    echo "Please enter your languages."
+    echo "If it has multiple opeions, please seperate them by \",\""
+    echo "For example: en,ja,tw"
+    read -p "Languages:" langs
+  else
+    langs=$GITP4_CONF_LANGS
+  fi
 fi
+echo "Languages: $langs"
 
 casperjs $GITW_FILE_DIRECTORY/git-p4-build.js \
       --user=$user \
