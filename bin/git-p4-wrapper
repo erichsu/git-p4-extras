@@ -3,12 +3,12 @@ GITW_SYMLINK=$(readlink "$0")
 if [ -n "$GITW_SYMLINK" ]
 then
   GITW_SYMLINK_DIRECTORY=$(dirname "$GITW_SYMLINK")
-  GITW_FILE_DIRECTORY=$(cd "$GITW_FILE_DIRECTORY" &&
+  GITW_FILE_DIRECTORY=$(cd "$(dirname $(which git-p4-wrapper))" &&
                         cd "$GITW_SYMLINK_DIRECTORY" && pwd -P)
 fi
 export GITW_FILE_DIRECTORY
 export PATH=$PATH:$GITW_FILE_DIRECTORY
-source toolkit
+source git-p4-toolkit
 
 GIT=`which git`
 command=$2
