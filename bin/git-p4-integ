@@ -1,5 +1,4 @@
 #!/bin/bash -e
-source bin/git-p4-toolkit
 BRANCH=$1
 GITP4_CONF_BRANCH=$(git config --get git-p4.int-branch)
 
