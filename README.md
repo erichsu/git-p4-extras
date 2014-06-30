@@ -16,8 +16,8 @@ Clone / Tarball:
 ```bash
 $ git clone --depth 1 https://github.com/erichsu/git-p4-extras.git
 $ cd git-p4-extras
-$ ln -s $(pwd)/git-wrapper /usr/local/bin/git-wrapper
-$ echo alias git=git-wrapper >> ~/.profile
+$ make install
+$ echo alias git=git-p4-wrapper >> ~/.profile
 $ source ~/.profile
 ```
 
