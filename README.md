@@ -6,11 +6,6 @@ Extend git-p4 with internal service and handy p4 commands wrapper
 Installation
 ------------
 
-Dependencies:
-- **git** 1.7 or newer
-- **[p4 cli](http://www.perforce.com/product/components/perforce-clients-tools)** 2013.3/740675 or newer
-- **[casperjs](http://casperjs.org)** 1.1.0 or newer
-
 Clone / Tarball:
 
 ```bash
@@ -34,7 +29,14 @@ If you are newbie for git-p4 toolkit, you may need to setup git-p4 config as wel
 
 Set default value of P4USER, P4PORT, P4CLIENT for p4 cli tool.
 
-.profile
+Download p4 cli and copy to /usr/local/bin
+```bash
+$ mv p4 /usr/local/bin/
+$ chmod +x /usr/local/bin/p4
+```
+
+
+~/.profile
 ```bash
 $ echo export P4USER="your_name" >> ~/.profile
 $ echo export P4PORT="tw-p4proxy:1667" >> ~/.profile
@@ -42,7 +44,7 @@ $ echo export P4CLIENT="your_workspace" >> ~/.profile
 $ source ~/.profile
 ```
 
-${HOME}/.gitconfig
+~/.gitconfig
 ```bash
 $ git config --global git-p4.port tw-p4proxy:1667
 $ git config --global git-p4.user your_name
@@ -105,3 +107,10 @@ Start submit a build job.
 ```bash
 $ git p4 build
 ```
+
+Dependencies
+------------
+
+- **git** 1.7 or newer
+- **[p4 cli](http://www.perforce.com/product/components/perforce-clients-tools)** 2013.3/740675 or newer
+- **[casperjs](http://casperjs.org)** 1.1.0 or newer
