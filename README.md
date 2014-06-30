@@ -39,6 +39,7 @@ Set default value of P4USER, P4PORT, P4CLIENT for p4 cli tool.
 $ echo export P4USER="your_name" >> ~/.profile
 $ echo export P4PORT="tw-p4proxy:1667" >> ~/.profile
 $ echo export P4CLIENT="your_workspace" >> ~/.profile
+$ source ~/.profile
 ```
 
 ${HOME}/.gitconfig
