@@ -43,10 +43,10 @@ $ echo export P4CLIENT="your_workspace" >> ~/.profile
 
 ${HOME}/.gitconfig
 ```bash
-$ git config --global git-p4.port=tw-p4proxy:1667
-$ git config --global git-p4.user=your_name
-$ git config --global git-p4.client=your_workspace
-$ git config --global git-p4.skipsubmitedit=true
+$ git config --global git-p4.port tw-p4proxy:1667
+$ git config --global git-p4.user your_name
+$ git config --global git-p4.client your_workspace
+$ git config --global git-p4.skipsubmitedit true
 ```
 
 Commands
