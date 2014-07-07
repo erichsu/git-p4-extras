@@ -15,6 +15,7 @@ function usage() {
   echo "git p4 build -h|--help    Show this info."
   echo "git p4 build -i|--info    Dump build options"
   echo "git p4 build -c|--config  Setup default options"
+  echo "git p4 build [--purpose \"desc\" | --langs \"lang1,lang2,...\" | --force]"
   echo
 }
 
