@@ -1,5 +1,12 @@
 #!/bin/bash -e
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
+  project="$(git config --get git-p4.project)"
+  if [ -z "$project" ]; then
     exit 1
+  else
+    pattern=${project:0:${#project}-5}
+  fi
+else
+  pattern="$1"
 fi
-p4 labels -t -E "*$1*" | tail
+p4 labels -t -E "*$pattern*" | tail
