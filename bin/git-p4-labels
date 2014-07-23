@@ -1,4 +1,22 @@
 #!/bin/bash -e
+n=10
+# Parse the options
+while [[ $1 = -?* ]]; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -n)
+            n="$2"
+            shift
+            ;;
+        *) ;;
+    esac
+
+shift
+done
+
 if [ -z "$1" ]; then
   project="$(git config --get git-p4.project)"
   if [ -z "$project" ]; then
@@ -9,4 +27,4 @@ if [ -z "$1" ]; then
 else
   pattern="$1"
 fi
-p4 labels -t -E "*$pattern*" | tail
+p4 labels -t -E "*$pattern*" | tail -n$n
