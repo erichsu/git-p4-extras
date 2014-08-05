@@ -6,11 +6,14 @@ var casper = require('casper').create({
 var x = require('casper').selectXPath;
 
 casper.start("http://ci.trendmicro.com/fullcontrol/index.php?mod=projects", function() {
-  this.echo("Start to Login.");
-  this.fill('form', {
-        'username':    casper.cli.get('user'),
-        'password':    casper.cli.get('pass')
-    }, true);
+  if (this.exists('input#username')) {
+    this.echo("Start to Login.");
+    this.fill('form', {
+          'username':    casper.cli.get('user'),
+          'password':    casper.cli.get('pass')
+      }, true);
+  }
+
 });
 
 casper.then(function() {

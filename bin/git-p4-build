@@ -15,7 +15,7 @@ function usage() {
   echo "git p4 build -h|--help    Show this info."
   echo "git p4 build -i|--info    Dump build options"
   echo "git p4 build -c|--config  Setup default options"
-  echo "git p4 build [--purpose \"desc\" | --langs \"lang1,lang2,...\" | --force]"
+  echo "git p4 build [--purpose \"desc\" | --langs \"lang1,lang2,...\" | --force | --cookies-file \"file\"]"
   echo
 }
 
@@ -77,6 +77,10 @@ while [[ $1 = -?* ]]; do
             langs="$2"
             shift
             ;;
+        --cookies-file)
+            cookiesFile="$2"
+            shift
+            ;;
         *) ;;
     esac
 
@@ -92,9 +96,12 @@ else
     echo "Login as \"$user\""
 fi
 
-## Get Password
-read -s -p "Password:" pass
-echo
+## Get Password & cookie
+if [ -z "$cookiesFile" ] || [ ! -e "$cookiesFile" ]; then
+  cookiesFile="/dev/null"
+  read -s -p "Password:" pass
+  echo
+fi
 
 ## Get Project name
 if [ -z "$GITP4_CONF_PROJECT" ]; then
@@ -161,4 +168,5 @@ casperjs $GITW_FILE_DIRECTORY/git-p4-build.js \
       --purpose="$purpose" \
       --force=$force \
       --platform=$platform \
-      --langs="$langs"
+      --langs="$langs" \
+      --cookies-file=$cookiesFile
