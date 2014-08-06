@@ -97,8 +97,7 @@ else
 fi
 
 ## Get Password & cookie
-if [ -z "$cookiesFile" ] || [ ! -e "$cookiesFile" ]; then
-  cookiesFile="/dev/null"
+if [ ! -e "$cookiesFile" ]; then
   read -s -p "Password:" pass
   echo
 fi
