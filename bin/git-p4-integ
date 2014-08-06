@@ -1,14 +1,12 @@
 #!/bin/bash -e
-BRANCH=$1
-GITP4_CONF_BRANCH=$(git config --get git-p4.int-branch)
-
 function usage() {
   echo
   echo "git p4 integ - Merge p4 branch by Brancy Mapping"
   echo
   echo "git p4 integ -h|--help        Show this info."
   echo "git p4 integ -n|--new-branch  Create new branch mapping"
-  echo "git p4 integ [MappingKeyword] Integrage by matched mapping"
+  echo "git p4 integ [-y | MappingKeyword]"
+  echo "                              Integrage by matched mapping"
   echo "                              Get git config for default mapping, "
   echo "                              by using git p4 integ -c|--config"
   echo
@@ -77,11 +75,17 @@ while [[ $1 = -?* ]]; do
             fi
             exit 0
             ;;
+        -y)
+            YN="y"
+            ;;
         *) ;;
     esac
 
 shift
 done
+
+BRANCH=$1
+GITP4_CONF_BRANCH=$(git config --get git-p4.int-branch)
 
 if [ -z "$BRANCH" ] && [ -z "$GITP4_CONF_BRANCH" ]; then
   echo "** Oh no!! Please give the Branch Mapping name"
@@ -109,8 +113,8 @@ else
 fi
 
 echo "Merge by Branch mapping: \"$BRANCH\""
-read -p "Are you sure?[y]" YN
-if [ "$YN" == "y" ] || [ -z "$YN" ]; then
+[ -z "$YN" ] && read -p "Are you sure?[y]" YN
+if [ "$YN" == "y" ]; then
   p4 integ -b $BRANCH -d
   p4 resolve -at
   p4 submit -d "Merge from Dev"
