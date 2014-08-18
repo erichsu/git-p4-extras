@@ -30,7 +30,8 @@ casper.then(function() {
     this.fill('form', {
       'purpose':    casper.cli.get('purpose'),
       'chkForceBuild': casper.cli.get('force'),
-      'selectPlatformOptions_left':    [casper.cli.get('platform')]
+      'selectPlatformOptions_left':    [casper.cli.get('platform')],
+      'buildType': casper.cli.get('build-type')
     });
     this.click("#button3");
 

@@ -81,6 +81,9 @@ while [[ $1 = -?* ]]; do
             cookiesFile="$2"
             shift
             ;;
+        --dev)
+            buildType="developerBuild"
+            ;;
         *) ;;
     esac
 
@@ -160,6 +163,12 @@ if [ -z "$langs" ]; then
 fi
 echo "Languages: $langs"
 
+## Get build type
+if [ -z "$buildType" ]; then
+  buildType="releaseBuild"
+fi
+echo "Build type: $buildType"
+
 casperjs $GITW_FILE_DIRECTORY/git-p4-build.js \
       --user=$user \
       --pass=$pass \
@@ -168,4 +177,5 @@ casperjs $GITW_FILE_DIRECTORY/git-p4-build.js \
       --force=$force \
       --platform=$platform \
       --langs="$langs" \
+      --build-type="$buildType" \
       --cookies-file=$cookiesFile
