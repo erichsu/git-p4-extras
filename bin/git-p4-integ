@@ -114,7 +114,7 @@ fi
 
 echo "Merge by Branch mapping: \"$BRANCH\""
 [ -z "$YN" ] && read -p "Are you sure?[y]" YN
-if [ "$YN" == "y" ]; then
+if [ "$YN" == "y" ] || [ -z "$YN" ]; then
   p4 integ -b $BRANCH -d
   p4 resolve -at
   p4 submit -d "Merge from Dev"
